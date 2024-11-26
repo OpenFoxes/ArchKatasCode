@@ -84,10 +84,10 @@
     <script>
     // Github REST API has one endpoint I care about: getContents
     // (documented at https://developer.github.com/v3/repos/contents/)
-    var githubSrcBase = 'https://api.github.com/repos/tedneward/ArchKatas/contents/'
+    const githubSrcBase = 'https://api.github.com/repos/tedneward/ArchKatas/contents/';
 
     // These functions require definition before use because browser
-    var fetchKata = function(filename) {
+    const fetchKata = function (filename) {
       console.log('fetchKata(', filename, ')');
       fetch(githubSrcBase + filename, {
         headers: {
@@ -97,29 +97,29 @@
           Accept: "application/vnd.github.v3.raw"
         }
       })
-        .then(response => response.json())
-        .then(json => {
-          console.log("fetchKata", json);
-          $('#kata-title').text(json.title);
-          json.description.forEach( (item) => {
-            $('#kata-text').append('<p>' + item + '</p>');
-          });
-          $('#bookmark-url').html('<a target="_blank" href="kata.html?kata=' + filename + '">Bookmark or click this to save your kata choice</a>');
-        });
+              .then(response => response.json())
+              .then(json => {
+                console.log("fetchKata", json);
+                $('#kata-title').text(json.title);
+                json.description.forEach((item) => {
+                  $('#kata-text').append('<p>' + item + '</p>');
+                });
+                $('#bookmark-url').html('<a target="_blank" href="kata.html?kata=' + filename + '">Bookmark or click this to save your kata choice</a>');
+              });
     };
-    var fetchKataList = function(listFn) {
+    const fetchKataList = function (listFn) {
       console.log('Fetching all katas...');
       fetch(githubSrcBase)
-        .then(response => response.json())
-        .then(json => {
-          var jsons = json.filter( 
-            (item) => (item.type === 'file') && 
-            (item.name.endsWith('.json')));
-          listFn(jsons);
-        });
+              .then(response => response.json())
+              .then(json => {
+                const jsons = json.filter(
+                        (item) => (item.type === 'file') &&
+                                (item.name.endsWith('.json')));
+                listFn(jsons);
+              });
     };
 
-    var kataname = $.getUrlVar('kata');
+    const kataname = $.getUrlVar('kata');
     if (kataname === 'all') {
       // Fetch a full list of katas from the repo
       // and put each one, linked, in a display
@@ -142,11 +142,11 @@
       // and pick one at random to fetch individually
       fetchKataList(function(jsons) {
         // Pick one at random
-        var getRandomInt = function(max) {
+        const getRandomInt = function (max) {
           return Math.floor(Math.random() * Math.floor(max));
         };
         console.log("Choosing kata from among", jsons.length, "choices....");
-        var choice = getRandomInt(jsons.length);
+        const choice = getRandomInt(jsons.length);
         console.log("Chose", choice, "! That's", jsons[choice].name);
         fetchKata(jsons[choice].name);
       });
